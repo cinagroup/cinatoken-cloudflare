@@ -254,7 +254,7 @@ miscRoutes.delete('/admin/2fa/:user_id', adminAuth, async (c) => {
 
 // ==================== 仪表盘数据 ====================
 
-/** GET /api/data/self - 获取当前用户的配额统计数据 */
+/** GET /api/data/self - 获取当前用户的配额时序数据 */
 miscRoutes.get('/data/self', userAuth, async (c) => {
   const userId = c.get('userId');
   const services = createServices(c.env);
@@ -266,22 +266,25 @@ miscRoutes.get('/data/self', userAuth, async (c) => {
       { orderBy: 'created_at', order: 'DESC', limit: 50 }
     );
 
-    const totalTokens = todayLogs.reduce(
-      (sum, log) => sum + (log.prompt_tokens || 0) + (log.completion_tokens || 0),
-      0
-    );
-    const totalQuota = todayLogs.reduce((sum, log) => sum + (log.quota || 0), 0);
+    // Return as array of time-series data points (frontend expects array)
+    const dataPoints = todayLogs.map((log) => ({
+      quota: log.quota || 0,
+      used_quota: user?.used_quota || 0,
+      count: 1,
+      created_at: log.created_at,
+    }));
 
-    return c.json(
-      successResponse({
-        user_id: userId,
+    // If no logs, return at least one data point with current stats
+    if (dataPoints.length === 0) {
+      dataPoints.push({
         quota: user?.quota || 0,
         used_quota: user?.used_quota || 0,
-        request_count: user?.request_count || 0,
-        today_tokens: totalTokens,
-        today_quota: totalQuota,
-      })
-    );
+        count: user?.request_count || 0,
+        created_at: Date.now(),
+      });
+    }
+
+    return c.json(successResponse(dataPoints));
   } catch (err: any) {
     return c.json({ success: false, message: err.message }, 500);
   }

@@ -25,7 +25,9 @@ tokenRoutes.get('/', async (c) => {
 
   return c.json({
     success: true,
-    data: result.tokens,
+    data: {
+      items: result.tokens,
+    },
     meta: {
       page,
       pageSize,

@@ -135,19 +135,29 @@ userRoutes.post('/self/password', userAuth, async (c) => {
 });
 
 /**
- * GET /api/user/self/groups - 获取用户可用分组
+ * GET /api/user/self/groups - 获取用户可用分组（含描述和倍率）
  */
 userRoutes.get('/self/groups', userAuth, async (c) => {
   const userId = c.get('userId');
   const services = createServices(c.env);
   const userInfo = await services.user.getUserInfo(userId);
 
-  return c.json(
-    successResponse({
-      groups: [userInfo.group_name, 'default'].filter((v, i, a) => a.indexOf(v) === i),
-      current: userInfo.group_name,
-    })
+  // Get group ratios from system options
+  const groupRatios = await services.repos.option.get<Record<string, number>>('group_ratio') || {};
+
+  // Build group map: group_name → { desc, ratio }
+  const groupNames = [userInfo.group_name, 'default'].filter(
+    (v, i, a) => a.indexOf(v) === i
   );
+  const groups: Record<string, { desc: string; ratio: number }> = {};
+  for (const name of groupNames) {
+    groups[name] = {
+      desc: name === 'default' ? 'Default' : name,
+      ratio: groupRatios[name] ?? 1.0,
+    };
+  }
+
+  return c.json(successResponse(groups));
 });
 
 // ==================== 管理员路由 ====================
