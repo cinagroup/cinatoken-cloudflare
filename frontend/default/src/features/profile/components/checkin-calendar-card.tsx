@@ -95,7 +95,7 @@ export function CheckinCalendarCard({
 
   const checkinRecordsMap = useMemo(() => {
     const map: Record<string, number> = {}
-    const records = checkinData?.stats?.records || []
+    const records = Array.isArray(checkinData?.stats?.records) ? checkinData.stats.records : []
     records.forEach((record: CheckinRecord) => {
       map[record.checkin_date] = record.quota_awarded
     })
@@ -103,7 +103,7 @@ export function CheckinCalendarCard({
   }, [checkinData?.stats?.records])
 
   const monthlyQuota = useMemo(() => {
-    const records = checkinData?.stats?.records || []
+    const records = Array.isArray(checkinData?.stats?.records) ? checkinData.stats.records : []
     return records.reduce(
       (sum: number, record: CheckinRecord) => sum + (record.quota_awarded || 0),
       0
