@@ -107,6 +107,7 @@ export const corsConfig = {
   allowHeaders: [
     'Content-Type',
     'Authorization',
+    'Cache-Control',
     'x-api-key',
     'x-request-id',
     'anthropic-version',
