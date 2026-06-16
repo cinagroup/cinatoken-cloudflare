@@ -61,6 +61,7 @@ export function ModelsSection(props: ModelsSectionProps) {
 
   // Order points so the largest model appears at the bottom of every stack.
   const orderedPoints = useMemo(() => {
+    if (!props.history?.models?.length || !props.history?.points?.length) return [] as any[]
     const order = new Map(
       props.history.models.map((m, idx) => [m.name, idx] as const)
     )

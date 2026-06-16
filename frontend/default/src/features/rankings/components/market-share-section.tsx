@@ -112,11 +112,14 @@ export function MarketShareSection(props: MarketShareSectionProps) {
       : 'rgba(15, 23, 42, 0.12)'
 
   const colourMap = useMemo(
-    () => buildVendorColourMap(props.history.vendors.map((v) => v.name)),
+    () => props.history?.vendors?.length
+      ? buildVendorColourMap(props.history.vendors.map((v) => v.name))
+      : new Map<string, string>(),
     [props.history]
   )
 
   const orderedPoints = useMemo(() => {
+    if (!props.history?.vendors?.length || !props.history?.points?.length) return [] as any[]
     const order = new Map(
       props.history.vendors.map((v, idx) => [v.name, idx] as const)
     )
