@@ -64,8 +64,11 @@ export const requestContext = createMiddleware<{
  * 允许的 CORS 来源
  */
 const ALLOWED_ORIGINS = [
+  'https://cinatoken.com',
   'https://app.cinatoken.com',
   'https://classic.cinatoken.com',
+  // Cloudflare Pages 预览 URL（支持任意分支部署）
+  // 通配符在 origin 函数中单独处理
   // 开发环境
   'http://localhost:3000',
   'http://localhost:3001',
@@ -85,8 +88,18 @@ export const corsConfig = {
       return origin || '*';
     }
     // 生产环境检查白名单
-    if (origin && ALLOWED_ORIGINS.includes(origin)) {
-      return origin;
+    if (origin) {
+      // 精确匹配
+      if (ALLOWED_ORIGINS.includes(origin)) {
+        return origin;
+      }
+      // Cloudflare Pages 预览 URL（如 *.cinatoken-web.pages.dev）
+      if (
+        origin.endsWith('.cinatoken-web.pages.dev') ||
+        origin.endsWith('.cinatoken-web-classic.pages.dev')
+      ) {
+        return origin;
+      }
     }
     return null;
   },
