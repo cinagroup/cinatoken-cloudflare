@@ -320,3 +320,32 @@ miscRoutes.get('/user/topup/info', userAuth, async (c) => {
     exchange_rate: 1,
   }));
 });
+
+// ==================== 公开信息端点 ====================
+
+/** GET /api/about - 关于页面内容（暂存） */
+miscRoutes.get('/about', async (_c) => {
+  return _c.json(successResponse({ content: '', title: 'About' }));
+});
+
+/** GET /api/rankings - 用户排行榜（暂存） */
+miscRoutes.get('/rankings', async (_c) => {
+  return _c.json(successResponse({ rankings: [], period: 'week' }));
+});
+
+/** GET /api/pricing - 定价/套餐（暂存） */
+miscRoutes.get('/pricing', async (_c) => {
+  return _c.json(successResponse({ plans: [], default_plan: null }));
+});
+
+/** GET /api/user/amount - 用户余额信息 */
+miscRoutes.get('/user/amount', userAuth, async (c) => {
+  const userId = c.get('userId');
+  const services = createServices(c.env);
+  const userInfo = await services.user.getUserInfo(userId);
+  return c.json(successResponse({
+    quota: userInfo.quota,
+    used_quota: userInfo.used_quota,
+    remain_quota: Math.max(0, userInfo.quota - userInfo.used_quota),
+  }));
+});
