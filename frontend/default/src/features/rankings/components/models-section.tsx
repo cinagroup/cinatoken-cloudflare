@@ -73,7 +73,7 @@ export function ModelsSection(props: ModelsSectionProps) {
   }, [props.history])
 
   const totalTokens = useMemo(
-    () => props.rows.reduce((s, r) => s + r.total_tokens, 0),
+    () => (props.rows ?? []).reduce((s, r) => s + r.total_tokens, 0),
     [props.rows]
   )
 
