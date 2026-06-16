@@ -409,7 +409,7 @@ export function ChannelMutateDrawer({
 
   // Get all models list
   const allModelsList = useMemo(
-    () => allModelsData?.data?.map((model) => model.id).filter(Boolean) || [],
+    () => Array.isArray(allModelsData?.data) ? allModelsData.data.map((model) => model.id).filter(Boolean) : [],
     [allModelsData]
   )
 
@@ -433,8 +433,9 @@ export function ChannelMutateDrawer({
 
   // Transform groups to multi-select options
   const groupOptions = useMemo(() => {
-    if (!groupsData?.data) return []
-    const allGroups = new Set([...groupsData.data, ...(currentGroups || [])])
+    const safeGroups = Array.isArray(groupsData?.data) ? groupsData.data : []
+    if (safeGroups.length === 0 && !currentGroups?.length) return []
+    const allGroups = new Set([...safeGroups, ...(currentGroups || [])])
     return Array.from(allGroups).map((group) => ({
       value: group,
       label: group,

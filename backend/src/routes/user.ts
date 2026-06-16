@@ -178,6 +178,18 @@ userRoutes.get('/passkey', userAuth, async (_c) => {
   return _c.json(successResponse({ enabled: false, credentials: [] }));
 });
 
+/** GET /api/user/amount - 获取用户余额信息 */
+userRoutes.get('/amount', userAuth, async (c) => {
+  const userId = c.get('userId');
+  const services = createServices(c.env);
+  const userInfo = await services.user.getUserInfo(userId);
+  return c.json(successResponse({
+    quota: userInfo.quota,
+    used_quota: userInfo.used_quota,
+    remain_quota: Math.max(0, userInfo.quota - userInfo.used_quota),
+  }));
+});
+
 // ==================== 管理员路由 ====================
 
 /**

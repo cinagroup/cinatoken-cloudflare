@@ -87,8 +87,9 @@ export function EditTagDialog({ open, onOpenChange }: EditTagDialogProps) {
     enabled: open,
   })
 
-  const availableModels =
-    allModelsData?.data?.map((m) => m.id).filter(Boolean) || []
+  const availableModels = Array.isArray(allModelsData?.data)
+    ? allModelsData.data.map((m) => m.id).filter(Boolean)
+    : []
   const availableGroups = groupsData?.data || []
 
   // Initialize form when tag changes

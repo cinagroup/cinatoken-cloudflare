@@ -347,7 +347,7 @@ miscRoutes.get('/pricing', async (_c) => {
   return _c.json(successResponse({ plans: [], default_plan: null }));
 });
 
-/** GET /api/user/amount - 用户余额信息 */
+/** GET /api/user/amount - 用户余额信息（暂已移至 userRoutes） */
 miscRoutes.get('/user/amount', userAuth, async (c) => {
   const userId = c.get('userId');
   const services = createServices(c.env);
@@ -357,4 +357,26 @@ miscRoutes.get('/user/amount', userAuth, async (c) => {
     used_quota: userInfo.used_quota,
     remain_quota: Math.max(0, userInfo.quota - userInfo.used_quota),
   }));
+});
+
+// ==================== 管理端点 ====================
+
+/** GET /api/group/ - 用户分组管理（暂存） */
+miscRoutes.get('/group', adminAuth, async (_c) => {
+  return _c.json(successResponse({ groups: [] }));
+});
+
+/** POST /api/grab_group - 用户分组分配（暂存） */
+miscRoutes.post('/grab_group', adminAuth, async (_c) => {
+  return _c.json(successResponse({ assigned: 0 }));
+});
+
+/** GET /api/option/admin/plans - 管理套餐（暂存） */
+miscRoutes.get('/option/admin/plans', adminAuth, async (_c) => {
+  return _c.json(successResponse({ plans: [] }));
+});
+
+/** GET /api/performance/summary - 性能摘要（暂存） */
+miscRoutes.get('/performance/summary', adminAuth, async (c) => {
+  return c.json(successResponse({ summary: [], total_requests: 0, total_tokens: 0 }));
 });
