@@ -84,12 +84,17 @@ const queryClient = new QueryClient({
         if (error.response?.status === 401) {
           toast.error(i18next.t('Session expired!'))
           useAuthStore.getState().auth.reset()
-          const redirect = `${router.history.location.href}`
-          router.navigate({ to: '/sign-in', search: { redirect } })
+          // Only navigate if router isn't already transitioning
+          if (router.state.status === 'idle') {
+            const redirect = `${router.history.location.href}`
+            router.navigate({ to: '/sign-in', search: { redirect } })
+          }
         }
         if (error.response?.status === 500) {
           toast.error(i18next.t('Internal Server Error!'))
-          router.navigate({ to: '/500' })
+          if (router.state.status === 'idle') {
+            router.navigate({ to: '/500' })
+          }
         }
       }
     },
