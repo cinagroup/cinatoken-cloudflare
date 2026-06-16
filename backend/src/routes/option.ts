@@ -19,11 +19,18 @@ optionRoutes.get('/', rootAuth, async (c) => {
   return c.json(successResponse(items));
 });
 
-/** PUT /api/option - 更新配置 */
+/** PUT /api/option - 更新配置（支持 {key, value} 单键更新 或 批量对象） */
 optionRoutes.put('/', rootAuth, async (c) => {
   const body = await c.req.json<Record<string, any>>();
   const services = createServices(c.env);
-  await services.repos.option.setMany(body);
+
+  // Frontend sends {key: "SomeKey", value: "someValue"} for single-key updates
+  if (body.key !== undefined && 'value' in body && Object.keys(body).length === 2) {
+    await services.repos.option.set(body.key, body.value);
+  } else {
+    // Legacy batch update: {Key1: value1, Key2: value2}
+    await services.repos.option.setMany(body);
+  }
 
   // 清除系统配置缓存
   await services.redis.delete('cache:config:system');
