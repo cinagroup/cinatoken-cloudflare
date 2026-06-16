@@ -380,3 +380,8 @@ miscRoutes.get('/option/admin/plans', adminAuth, async (_c) => {
 miscRoutes.get('/performance/summary', adminAuth, async (c) => {
   return c.json(successResponse({ summary: [], total_requests: 0, total_tokens: 0 }));
 });
+
+/** GET /api/perf-metrics/summary - 性能指标摘要（兼容前端路径） */
+miscRoutes.get('/perf-metrics/summary', adminAuth, async (c) => {
+  return c.json(successResponse({ summary: [], total_requests: 0, total_tokens: 0 }));
+});
