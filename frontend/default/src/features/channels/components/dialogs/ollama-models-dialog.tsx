@@ -243,7 +243,8 @@ export function OllamaModelsDialog({
     setPullProgress({ status: 'starting', completed: 0, total: 0 })
 
     try {
-      const response = await fetch('/api/channel/ollama/pull/stream', {
+      const baseURL = (import.meta as any).env.VITE_REACT_APP_SERVER_URL || ''
+      const response = await fetch(`${baseURL}/api/channel/ollama/pull/stream`, {
         method: 'POST',
         credentials: 'include',
         headers: {

@@ -103,7 +103,8 @@ export function mapStatusDataToConfig(
 
 // Fetch system config from API
 async function fetchSystemConfig(): Promise<Partial<SystemConfig>> {
-  const response = await fetch('/api/status')
+  const baseURL = (import.meta.env.VITE_REACT_APP_SERVER_URL as string) || ''
+  const response = await fetch(`${baseURL}/api/status`)
   if (!response.ok) throw new Error('Failed to fetch status')
 
   const data: StatusApiResponse = await response.json()
