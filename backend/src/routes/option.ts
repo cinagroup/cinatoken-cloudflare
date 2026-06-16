@@ -10,11 +10,13 @@ import { successResponse } from '../utils/response';
 
 export const optionRoutes = new Hono<{ Bindings: Env; Variables: HonoVariables }>();
 
-/** GET /api/option - 获取所有配置 */
+/** GET /api/option - 获取所有配置（返回数组格式，兼容前端） */
 optionRoutes.get('/', rootAuth, async (c) => {
   const services = createServices(c.env);
   const config = await services.repos.option.getAllAsObject();
-  return c.json(successResponse(config));
+  // Convert object to array of {key, value} pairs for frontend compatibility
+  const items = Object.entries(config).map(([key, value]) => ({ key, value }));
+  return c.json(successResponse(items));
 });
 
 /** PUT /api/option - 更新配置 */
