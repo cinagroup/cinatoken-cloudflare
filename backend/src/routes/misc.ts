@@ -252,19 +252,6 @@ miscRoutes.delete('/admin/2fa/:user_id', adminAuth, async (c) => {
   return c.json(successResponse({ disabled: true }));
 });
 
-// ==================== 用户模型列表 ====================
-
-/** GET /api/user/models - 获取用户可用的模型列表 */
-miscRoutes.get('/user/models', userAuth, async (c) => {
-  try {
-    const services = createServices(c.env);
-    const models = await services.repos.channel.getAllModels();
-    return c.json(successResponse(models));
-  } catch (err: any) {
-    return c.json({ success: false, message: err.message }, 500);
-  }
-});
-
 // ==================== 仪表盘数据 ====================
 
 /** GET /api/data/self - 获取当前用户的配额统计数据 */

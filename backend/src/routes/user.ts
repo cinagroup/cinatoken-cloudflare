@@ -183,6 +183,17 @@ userRoutes.get('/search', adminAuth, searchRateLimit, async (c) => {
   }
 });
 
+/** GET /api/user/models - 获取用户可用的模型列表 */
+userRoutes.get('/models', userAuth, async (c) => {
+  try {
+    const services = createServices(c.env);
+    const models = await services.repos.channel.getAllModels();
+    return c.json(successResponse(models));
+  } catch (err: any) {
+    return c.json({ success: false, message: err.message }, 500);
+  }
+});
+
 /**
  * GET /api/user/:id - 用户详情（管理员）
  */
