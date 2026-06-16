@@ -1,0 +1,46 @@
+{
+  "name": "cinatoken-backend",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "deploy:prod": "wrangler deploy --env production",
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "format": "prettier --write \"src/**/*.{ts,tsx,json}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,json}\"",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "db:migrate": "wrangler d1 migrations apply cinatoken-db",
+    "db:migrate:prod": "wrangler d1 migrations apply cinatoken-db --env production --remote"
+  },
+  "keywords": [
+    "cloudflare",
+    "workers",
+    "cinatoken",
+    "ai-gateway"
+  ],
+  "author": "CinaGroup",
+  "license": "AGPL-3.0",
+  "description": "CinaToken AI Model Gateway - Cloudflare Workers Backend",
+  "dependencies": {
+    "@upstash/redis": "^1.38.0",
+    "hono": "^4.12.25"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260616.1",
+    "@types/node": "^25.9.3",
+    "@typescript-eslint/eslint-plugin": "^8.61.1",
+    "@typescript-eslint/parser": "^8.61.1",
+    "eslint": "^10.5.0",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.8.4",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.9",
+    "wrangler": "^4.100.0"
+  }
+}

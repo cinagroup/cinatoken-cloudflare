@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build
+dist/
+build/
+.wrangler/
+
+# Environment
+.env
+.env.*
+.dev.vars
+!.dev.vars.example
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# pnpm
+pnpm-lock.yaml
+frontend/**/pnpm-lock.yaml
+
+# Python
+__pycache__/
+*.pyc

@@ -1,0 +1,49 @@
+name: Deploy Frontend (Default)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "frontend/default/**"
+      - "frontend/package.json"
+      - "frontend/pnpm-workspace.yaml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "frontend/default/**"
+      - "frontend/package.json"
+      - "frontend/pnpm-workspace.yaml"
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "pnpm"
+          cache-dependency-path: frontend/pnpm-lock.yaml
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        working-directory: frontend/default
+        run: pnpm build
+
+      - name: Deploy to Cloudflare Pages
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: frontend/default
+          command: pages deploy dist --project-name=cinatoken-web --branch=main
