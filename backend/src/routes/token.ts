@@ -15,8 +15,9 @@ tokenRoutes.use('*', userAuth);
  */
 tokenRoutes.get('/', async (c) => {
   const userId = c.get('userId');
-  const page = parseInt(c.req.query('page') || '1');
-  const pageSize = parseInt(c.req.query('pageSize') || '20');
+  // Accept both p/page and size/pageSize for frontend compatibility
+  const page = parseInt(c.req.query('p') || c.req.query('page') || '1');
+  const pageSize = parseInt(c.req.query('size') || c.req.query('pageSize') || '20');
   const status = c.req.query('status') ? parseInt(c.req.query('status')!) : undefined;
 
   const tokenService = createServices(c.env).token;

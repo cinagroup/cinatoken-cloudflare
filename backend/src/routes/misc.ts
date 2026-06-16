@@ -251,3 +251,61 @@ miscRoutes.delete('/admin/2fa/:user_id', adminAuth, async (c) => {
   await services.repos.option.set('2fa_enabled', false);
   return c.json(successResponse({ disabled: true }));
 });
+
+// ==================== 用户模型列表 ====================
+
+/** GET /api/user/models - 获取用户可用的模型列表 */
+miscRoutes.get('/user/models', userAuth, async (c) => {
+  try {
+    const services = createServices(c.env);
+    const models = await services.repos.channel.getAllModels();
+    return c.json(successResponse(models));
+  } catch (err: any) {
+    return c.json({ success: false, message: err.message }, 500);
+  }
+});
+
+// ==================== 仪表盘数据 ====================
+
+/** GET /api/data/self - 获取当前用户的配额统计数据 */
+miscRoutes.get('/data/self', userAuth, async (c) => {
+  const userId = c.get('userId');
+  const services = createServices(c.env);
+
+  try {
+    const user = await services.repos.user.findById(userId);
+    const todayLogs = await services.repos.log.findMany(
+      { user_id: userId },
+      { orderBy: 'created_at', order: 'DESC', limit: 50 }
+    );
+
+    const totalTokens = todayLogs.reduce(
+      (sum, log) => sum + (log.prompt_tokens || 0) + (log.completion_tokens || 0),
+      0
+    );
+    const totalQuota = todayLogs.reduce((sum, log) => sum + (log.quota || 0), 0);
+
+    return c.json(
+      successResponse({
+        user_id: userId,
+        quota: user?.quota || 0,
+        used_quota: user?.used_quota || 0,
+        request_count: user?.request_count || 0,
+        today_tokens: totalTokens,
+        today_quota: totalQuota,
+      })
+    );
+  } catch (err: any) {
+    return c.json({ success: false, message: err.message }, 500);
+  }
+});
+
+/** GET /api/data/users - 管理员用户数据（暂存） */
+miscRoutes.get('/data/users', adminAuth, async (_c) => {
+  return _c.json(successResponse([]));
+});
+
+/** GET /api/uptime/status - Uptime 监控状态（暂存） */
+miscRoutes.get('/uptime/status', userAuth, async (_c) => {
+  return _c.json(successResponse([]));
+});
