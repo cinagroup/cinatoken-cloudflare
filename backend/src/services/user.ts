@@ -44,6 +44,8 @@ export interface UserInfo {
   request_count: number;
   group_name: string;
   created_at: number;
+  af_code?: string | null;
+  aff_count?: number;
 }
 
 export class UserService {
@@ -408,6 +410,8 @@ export class UserService {
       request_count: user.request_count,
       group_name: user.group_name,
       created_at: user.created_at,
+      af_code: user.af_code,
+      aff_count: user.aff_count,
     };
   }
 }

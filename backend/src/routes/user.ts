@@ -160,6 +160,24 @@ userRoutes.get('/self/groups', userAuth, async (c) => {
   return c.json(successResponse(groups));
 });
 
+/** GET /api/user/aff - 获取用户邀请信息 */
+userRoutes.get('/aff', userAuth, async (c) => {
+  const userId = c.get('userId');
+  const services = createServices(c.env);
+  const userInfo = await services.user.getUserInfo(userId);
+  return c.json(successResponse({
+    aff_code: userInfo.af_code || '',
+    aff_count: userInfo.aff_count || 0,
+    aff_quota: 0,
+    aff_history_quota: 0,
+  }));
+});
+
+/** GET /api/user/passkey - 获取 Passkey 状态 */
+userRoutes.get('/passkey', userAuth, async (_c) => {
+  return _c.json(successResponse({ enabled: false, credentials: [] }));
+});
+
 // ==================== 管理员路由 ====================
 
 /**

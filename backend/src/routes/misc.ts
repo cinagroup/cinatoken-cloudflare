@@ -299,3 +299,24 @@ miscRoutes.get('/data/users', adminAuth, async (_c) => {
 miscRoutes.get('/uptime/status', userAuth, async (_c) => {
   return _c.json(successResponse([]));
 });
+
+// ==================== 任务与账单 ====================
+
+/** GET /api/task/self - 用户任务列表（暂存） */
+miscRoutes.get('/task/self', userAuth, async (c) => {
+  return c.json(successResponse({ tasks: [], total: 0 }));
+});
+
+/** GET /api/user/topup/self - 用户充值记录（暂存） */
+miscRoutes.get('/user/topup/self', userAuth, async (c) => {
+  return c.json(successResponse({ items: [], total: 0 }));
+});
+
+/** GET /api/user/topup/info - 充值信息/支付方式（暂存） */
+miscRoutes.get('/user/topup/info', userAuth, async (c) => {
+  return c.json(successResponse({
+    payment_methods: [],
+    min_amount: 0,
+    exchange_rate: 1,
+  }));
+});
