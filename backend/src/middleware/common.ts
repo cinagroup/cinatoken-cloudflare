@@ -108,6 +108,7 @@ export const corsConfig = {
     'Content-Type',
     'Authorization',
     'Cache-Control',
+    'New-Api-User',
     'x-api-key',
     'x-request-id',
     'anthropic-version',
