@@ -217,7 +217,7 @@ export function ModelsSection(props: ModelsSectionProps) {
             {t('Compare the most popular models on the platform')}
           </p>
         </header>
-        {props.rows.length === 0 ? (
+        {(props.rows ?? []).length === 0 ? (
           <div className='text-muted-foreground/80 px-5 py-8 text-center text-sm'>
             {t('No models match the selected filters')}
           </div>
