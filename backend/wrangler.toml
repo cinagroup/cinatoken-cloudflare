@@ -33,7 +33,7 @@ LOG_LEVEL = "debug"
 # 生产环境配置
 [env.production]
 name = "cinatoken-backend"
-workers_dev = false
+workers_dev = true
 
 [[env.production.kv_namespaces]]
 binding = "APP_KV"
