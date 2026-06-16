@@ -7,11 +7,14 @@ ENVIRONMENT=dev
 APP_NAME=CinaToken
 
 # Upstash Redis (开发环境可留空，本地会自动降级)
-UPSTASH_REDIS_URL=
-UPSTASH_REDIS_TOKEN=
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
 
 # JWT 密钥 (至少 32 字节)
 JWT_SECRET=change-me-to-a-random-32-byte-string
+
+# AES-256-GCM 加密密钥 (64 字符十六进制)
+ENCRYPTION_KEY=change-me-to-a-random-64-char-hex-string
 
 # API Key (用于服务间调用)
 API_KEY=change-me-to-a-random-api-key

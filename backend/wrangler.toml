@@ -33,6 +33,7 @@ LOG_LEVEL = "debug"
 # 生产环境配置
 [env.production]
 name = "cinatoken-backend"
+workers_dev = false
 
 [[env.production.kv_namespaces]]
 binding = "APP_KV"
@@ -52,7 +53,6 @@ ENVIRONMENT = "production"
 APP_NAME = "CinaToken"
 LOG_LEVEL = "info"
 
-# 自定义域名路由
-[[env.production.routes]]
-pattern = "api.cinatoken.com/*"
-zone_name = "cinatoken.com"
+	# 自定义域名通过 Cloudflare Dashboard 管理
+	# 或使用: wrangler deploy --env production --route "api.cinatoken.com/*"
+	
