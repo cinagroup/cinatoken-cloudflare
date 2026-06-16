@@ -329,8 +329,17 @@ miscRoutes.get('/about', async (_c) => {
 });
 
 /** GET /api/rankings - 用户排行榜（暂存） */
-miscRoutes.get('/rankings', async (_c) => {
-  return _c.json(successResponse({ rankings: [], period: 'week' }));
+miscRoutes.get('/rankings', async (c) => {
+  const period = c.req.query('period') || 'week';
+  return c.json(successResponse({
+    period,
+    models: [],
+    models_history: { models: [], points: [] },
+    vendors: [],
+    vendor_share_history: { vendors: [], points: [] },
+    top_movers: [],
+    top_droppers: [],
+  }));
 });
 
 /** GET /api/pricing - 定价/套餐（暂存） */
