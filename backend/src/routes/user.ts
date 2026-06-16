@@ -190,6 +190,11 @@ userRoutes.get('/amount', userAuth, async (c) => {
   }));
 });
 
+/** POST /api/user/amount - 更新用户余额（前端兼容） */
+userRoutes.post('/amount', userAuth, async (c) => {
+  return c.json(successResponse({ quota: 0, used_quota: 0, remain_quota: 0 }));
+});
+
 // ==================== 管理员路由 ====================
 
 /**

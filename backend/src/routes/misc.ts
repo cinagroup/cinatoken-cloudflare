@@ -385,3 +385,30 @@ miscRoutes.get('/performance/summary', adminAuth, async (c) => {
 miscRoutes.get('/perf-metrics/summary', adminAuth, async (c) => {
   return c.json(successResponse({ summary: [], total_requests: 0, total_tokens: 0 }));
 });
+
+// ==================== 额外前端兼容端点 ====================
+
+/** GET /api/vendors - 供应商列表（暂存） */
+miscRoutes.get('/vendors', userAuth, async (_c) => {
+  return _c.json(successResponse([]));
+});
+
+/** GET /api/task - 任务列表（暂存） */
+miscRoutes.get('/task', userAuth, async (c) => {
+  return c.json(successResponse({ tasks: [], total: 0 }));
+});
+
+/** GET /api/user/topup - 用户充值记录（兼容路径） */
+miscRoutes.get('/user/topup', userAuth, async (c) => {
+  return c.json(successResponse({ items: [], total: 0 }));
+});
+
+/** GET /api/subscription/admin/plans - 管理套餐列表（暂存） */
+miscRoutes.get('/subscription/admin/plans', adminAuth, async (_c) => {
+  return _c.json(successResponse({ plans: [] }));
+});
+
+/** GET /api/data - 管理员数据（兼容路径） */
+miscRoutes.get('/data', adminAuth, async (c) => {
+  return c.json(successResponse([]));
+});
