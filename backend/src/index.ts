@@ -102,6 +102,17 @@ app.get('/ready', async (c) => {
 
 // ==================== API 路由 ====================
 
+// 自动去掉尾部斜杠重定向（兼容前端 /api/option/ 等请求）
+app.use('*', async (c, next) => {
+  const path = c.req.path;
+  if (path.length > 1 && path.endsWith('/')) {
+    const url = new URL(c.req.url);
+    url.pathname = path.slice(0, -1);
+    return c.redirect(url.toString(), 308);
+  }
+  await next();
+});
+
 // 公开状态接口
 app.get('/api/status', (c) => {
   return c.json(
