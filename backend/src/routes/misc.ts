@@ -181,7 +181,7 @@ miscRoutes.post('/aff_transfer', userAuth, async (c) => {
 
 miscRoutes.get('/performance/stats', rootAuth, async (c) => {
   return c.json(successResponse({
-    uptime: process.uptime?.() || 0,
+    uptime: Math.floor((Date.now() - (c.get('startTime') as number || Date.now())) / 1000),
     memory: { used: 0, total: 0 },
     requests: { total: 0, active: 0 },
   }));
