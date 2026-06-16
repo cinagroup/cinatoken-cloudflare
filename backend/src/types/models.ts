@@ -98,6 +98,8 @@ export interface Channel {
   priority: number; // 优先级
   auto_balance: number; // 自动余额更新（0:否, 1:是）
   setting: string | null; // 渠道设置（JSON）
+  tag: string | null; // 渠道标签
+  used_quota: number; // 已用配额
 }
 
 export interface CreateChannelInput {
@@ -113,6 +115,7 @@ export interface CreateChannelInput {
   priority?: number;
   auto_balance?: number;
   setting?: Record<string, any>;
+  tag?: string;
 }
 
 export interface UpdateChannelInput {
@@ -129,6 +132,7 @@ export interface UpdateChannelInput {
   priority?: number;
   auto_balance?: number;
   setting?: Record<string, any>;
+  tag?: string;
 }
 
 // ==================== 日志模型 ====================

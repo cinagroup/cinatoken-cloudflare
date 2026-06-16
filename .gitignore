@@ -26,10 +26,5 @@ Thumbs.db
 # Logs
 *.log
 
-# pnpm
-pnpm-lock.yaml
-frontend/**/pnpm-lock.yaml
-
-# Python
-__pycache__/
-*.pyc
+# Lock files are committed for reproducible builds
+# pnpm-lock.yaml is NOT ignored

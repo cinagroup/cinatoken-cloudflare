@@ -121,24 +121,27 @@ export class RedisService {
   /**
    * 批量删除（按前缀模式）
    * 注意：Upstash 不支持 KEYS 命令，使用时需谨慎
+   * Redis 不可用时返回 0（静默降级）
    */
   async deleteByPattern(pattern: string): Promise<number> {
-    // Upstash 支持 SCAN
-    let cursor = '0';
-    let deleted = 0;
+    return this.safe(async () => {
+      // Upstash 支持 SCAN
+      let cursor = '0';
+      let deleted = 0;
 
-    do {
-      const result = await this.redis.scan(cursor, { match: pattern, count: 100 });
-      cursor = result[0];
-      const keys = result[1];
+      do {
+        const result = await this.redis.scan(cursor, { match: pattern, count: 100 });
+        cursor = result[0];
+        const keys = result[1];
 
-      if (keys.length > 0) {
-        await this.redis.del(...keys);
-        deleted += keys.length;
-      }
-    } while (cursor !== '0');
+        if (keys.length > 0) {
+          await this.redis.del(...keys);
+          deleted += keys.length;
+        }
+      } while (cursor !== '0');
 
-    return deleted;
+      return deleted;
+    }, 0);
   }
 
   // ==================== 限流相关 ====================
