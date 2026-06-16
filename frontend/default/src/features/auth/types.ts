@@ -64,6 +64,7 @@ export interface LoginResponse {
   success: boolean
   message: string
   data?: {
+    token?: string
     require_2fa?: boolean
     id?: number
   }

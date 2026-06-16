@@ -158,12 +158,17 @@ export function getCommonHeaders(): Record<string, string> {
 // Request Interceptor
 // ============================================================================
 
-// Attach user ID header for all requests
+// Attach user ID and auth token for all requests
 api.interceptors.request.use((config) => {
   const uid = getUserId()
   if (uid) {
     // Custom header for user identification
     ;(config.headers as Record<string, string>)['New-Api-User'] = uid
+  }
+  // Attach JWT token for backend authentication
+  const token = window.localStorage.getItem('token')
+  if (token) {
+    ;(config.headers as Record<string, string>)['Authorization'] = `Bearer ${token}`
   }
   return config
 })

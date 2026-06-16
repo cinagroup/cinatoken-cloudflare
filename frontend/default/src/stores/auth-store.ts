@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@cinagroup.com
 */
 import { create } from 'zustand'
+import { removeToken } from '@/features/auth/lib/storage'
 
 export type UserPermissions = {
   sidebar_settings?: boolean
@@ -86,6 +87,7 @@ export const useAuthStore = create<AuthState>()((set) => {
               window.localStorage.setItem('user', JSON.stringify(user))
             } else {
               window.localStorage.removeItem('user')
+              removeToken() // Clear token on manual user clear
             }
           }
           return { ...state, auth: { ...state.auth, user } }
@@ -94,6 +96,7 @@ export const useAuthStore = create<AuthState>()((set) => {
         set((state) => {
           if (typeof window !== 'undefined') {
             window.localStorage.removeItem('user')
+            removeToken() // Clear token on logout/reset
           }
           return {
             ...state,

@@ -21,7 +21,7 @@ import i18n from 'i18next'
 import { useAuthStore } from '@/stores/auth-store'
 import { getSelf } from '@/lib/api'
 import type { User } from '@/features/users/types'
-import { saveUserId } from '../lib/storage'
+import { saveUserId, saveToken } from '../lib/storage'
 
 function getSavedLanguage(user: User): string | undefined {
   const userData = user as Record<string, unknown>
@@ -54,9 +54,14 @@ export function useAuthRedirect() {
    * @param redirectTo - Redirect path after login
    */
   const handleLoginSuccess = async (
-    userData?: { id?: number } | null,
+    userData?: { token?: string; id?: number } | null,
     redirectTo?: string
   ) => {
+    // Save JWT token for subsequent API requests
+    if (userData?.token) {
+      saveToken(userData.token)
+    }
+
     // Save user ID if available
     if (userData?.id) {
       saveUserId(userData.id)

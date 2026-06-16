@@ -164,7 +164,10 @@ export function UserAuthForm({
           return
         }
 
-        await handleLoginSuccess(res.data as { id?: number } | null, redirectTo)
+        await handleLoginSuccess(
+          { token: res.data?.token, id: res.data?.id },
+          redirectTo
+        )
         toast.success(t('Welcome back!'))
       }
     } catch (_error) {
@@ -201,7 +204,10 @@ export function UserAuthForm({
     try {
       const res = await wechatLoginByCode(wechatCode)
       if (res?.success) {
-        await handleLoginSuccess(res.data as { id?: number } | null, redirectTo)
+        await handleLoginSuccess(
+          { token: res.data?.token, id: res.data?.id },
+          redirectTo
+        )
         toast.success(t('Signed in via WeChat'))
         handleWeChatDialogChange(false)
       } else {
@@ -265,7 +271,7 @@ export function UserAuthForm({
       }
 
       await handleLoginSuccess(
-        finish.data as { id?: number } | null,
+        finish.data as { token?: string; id?: number } | null,
         redirectTo
       )
       toast.success(t('Signed in with Passkey'))

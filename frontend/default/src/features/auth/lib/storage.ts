@@ -28,6 +28,7 @@ const STORAGE_KEYS = {
   USER_ID: 'uid',
   AFFILIATE: 'aff',
   STATUS: 'status',
+  TOKEN: 'token',
 } as const
 
 // ============================================================================
@@ -102,5 +103,49 @@ export function saveAffiliateCode(code: string): void {
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Failed to save affiliate code:', error)
+  }
+}
+
+// ============================================================================
+// Auth Token Storage
+// ============================================================================
+
+/**
+ * Save JWT token to localStorage
+ */
+export function saveToken(token: string): void {
+  if (typeof window === 'undefined') return
+  try {
+    window.localStorage.setItem(STORAGE_KEYS.TOKEN, token)
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Failed to save token:', error)
+  }
+}
+
+/**
+ * Get JWT token from localStorage
+ */
+export function getToken(): string | null {
+  if (typeof window === 'undefined') return null
+  try {
+    return window.localStorage.getItem(STORAGE_KEYS.TOKEN)
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Failed to get token:', error)
+    return null
+  }
+}
+
+/**
+ * Remove JWT token from localStorage
+ */
+export function removeToken(): void {
+  if (typeof window === 'undefined') return
+  try {
+    window.localStorage.removeItem(STORAGE_KEYS.TOKEN)
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Failed to remove token:', error)
   }
 }
