@@ -129,7 +129,7 @@ export function About() {
     queryFn: getAboutContent,
   })
 
-  const rawContent = data?.data?.trim() ?? ''
+  const rawContent = typeof data?.data === 'string' ? data.data.trim() : ''
   const hasContent = rawContent.length > 0
   const isUrl = hasContent && isValidUrl(rawContent)
   const isHtml = hasContent && !isUrl && isLikelyHtml(rawContent)
